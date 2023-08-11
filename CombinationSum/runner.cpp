@@ -2,8 +2,26 @@
 
 class Solution {
 private:
+    std::map<std::vector<int>, bool> combinationsSeenMap;
+    void orderRespectiveInsert(std::vector<int> &v, int newElem) {
+        if (v.empty()) {
+            v.push_back(newElem);
+            return;
+        }
+
+        int insertionIndex = v.size();
+        for (int i = 0; i < v.size(); i++) {
+            if (v[i] >= newElem) {
+                insertionIndex = i;
+                break;
+            }
+        }
+
+        v.insert(v.begin() + insertionIndex, newElem);
+    }
+
     void generateCombinations(const std::vector<int> &candidates, const int &target,
-                              std::set<std::vector<int>> &permutations, std::vector<int> path = {},
+                              std::vector<std::vector<int>> &permutations, const std::vector<int>& path = {},
                               const int &sum = 0) {
         for (const int &candidate: candidates) {
             int newSum = sum + candidate;
@@ -11,17 +29,20 @@ private:
                 return;
             }
 
-            path.push_back(candidate);
+            std::vector<int> newPath = path;
+            orderRespectiveInsert(newPath, candidate);
+
+            if (combinationsSeenMap.count(newPath) == 1) {
+                continue;
+            }
+            combinationsSeenMap[newPath] = true;
+
             if (newSum == target) {
-                std::sort(path.begin(), path.end(), [](const int &a, const int &b) -> bool {
-                    return a < b;
-                });
-                permutations.insert(path);
+                permutations.push_back(newPath);
                 return;
             }
 
-            generateCombinations(candidates, target, permutations, path, newSum);
-            path.pop_back();
+            generateCombinations(candidates, target, permutations, newPath, newSum);
         }
     }
 
@@ -31,10 +52,9 @@ public:
             return a < b;
         });
 
-        std::set<std::vector<int>> combinationsSet;
-        generateCombinations(candidates, target, combinationsSet);
+        std::vector<std::vector<int>> combinationsVector;
+        generateCombinations(candidates, target, combinationsVector);
 
-        std::vector<std::vector<int>> combinationsVector(combinationsSet.begin(), combinationsSet.end());
         return combinationsVector;
     }
 };
