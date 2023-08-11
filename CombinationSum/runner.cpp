@@ -4,7 +4,7 @@ class Solution {
 private:
     std::map<std::vector<int>, bool> combinationsSeenMap;
 
-    void orderRespectiveInsert(std::vector<int> &v, int newElem) {
+    void orderRespectiveInsert(std::vector<int> &v, const int &newElem) {
         if (v.empty()) {
             v.push_back(newElem);
             return;
