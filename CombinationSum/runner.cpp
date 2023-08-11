@@ -3,6 +3,7 @@
 class Solution {
 private:
     std::map<std::vector<int>, bool> combinationsSeenMap;
+
     void orderRespectiveInsert(std::vector<int> &v, int newElem) {
         if (v.empty()) {
             v.push_back(newElem);
@@ -21,7 +22,7 @@ private:
     }
 
     void generateCombinations(const std::vector<int> &candidates, const int &target,
-                              std::vector<std::vector<int>> &permutations, const std::vector<int>& path = {},
+                              std::vector<std::vector<int>> &permutations, const std::vector<int> &path = {},
                               const int &sum = 0) {
         for (const int &candidate: candidates) {
             int newSum = sum + candidate;
