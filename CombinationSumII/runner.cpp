@@ -4,7 +4,7 @@ class Solution {
 private:
     std::vector<std::vector<int>> seenCombinations;
     void generateCombinations(const std::vector<int> &candidates, const int &target,
-                              std::set<std::vector<int>> &combinationsSet, std::vector<int> &path, std::vector<int> &usedIndices,
+                              std::vector<std::vector<int>> &combinations, std::vector<int> &path, std::vector<int> &usedIndices,
                               const int &sum = 0) {
         for (int i = usedIndices.back() + 1; i < candidates.size(); i++) {
 //            if (std::binary_search(usedIndices.begin(), usedIndices.end(), i)) {
@@ -29,13 +29,13 @@ private:
             usedIndices.push_back(i);
 
             if (newSum == target) {
-                combinationsSet.insert(path);
+                combinations.push_back(path);
                 path.pop_back();
                 usedIndices.pop_back();
                 return;
             }
 
-            generateCombinations(candidates, target, combinationsSet, path, usedIndices, newSum);
+            generateCombinations(candidates, target, combinations, path, usedIndices, newSum);
 
             path.pop_back();
             usedIndices.pop_back();
@@ -46,13 +46,13 @@ public:
     std::vector<std::vector<int>> combinationSum2(std::vector<int> &candidates, int target) {
         std::sort(candidates.begin(), candidates.end());
 
-        std::set<std::vector<int>> combinationsSet;
+        std::vector<std::vector<int>> combinations;
         // ryan also suggested to declare a variable and pass it by reference, which I disregarded when I initially thought of it because it's a tad ugly
         std::vector<int> path;
         std::vector<int> usedIndices = {-1};
-        generateCombinations(candidates, target, combinationsSet, path, usedIndices);
+        generateCombinations(candidates, target, combinations, path, usedIndices);
 
-        return std::vector<std::vector<int>> (combinationsSet.begin(), combinationsSet.end());
+        return combinations;
     }
 };
 
