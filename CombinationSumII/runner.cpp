@@ -6,7 +6,7 @@ private:
     void generateCombinations(const std::vector<int> &candidates, const int &target,
                               std::vector<std::vector<int>> &combinations, std::vector<int> &path, std::vector<int> &usedIndices,
                               const int &sum = 0) {
-        for (int i = usedIndices.back() + 1; i < candidates.size(); i++) {
+        for (int i = usedIndices.empty() ? 0 : usedIndices.back() + 1; i < candidates.size(); i++) {
 //            if (std::binary_search(usedIndices.begin(), usedIndices.end(), i)) {
 //                continue;
 //            }
@@ -49,7 +49,7 @@ public:
         std::vector<std::vector<int>> combinations;
         // ryan also suggested to declare a variable and pass it by reference, which I disregarded when I initially thought of it because it's a tad ugly
         std::vector<int> path;
-        std::vector<int> usedIndices = {-1};
+        std::vector<int> usedIndices;
         generateCombinations(candidates, target, combinations, path, usedIndices);
 
         return combinations;
