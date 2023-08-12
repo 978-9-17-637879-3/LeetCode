@@ -2,7 +2,7 @@
 
 class Solution {
 private:
-    std::map<std::vector<int>, bool> combinationsSeenMap;
+    std::set<std::vector<int>> combinationsSeenSet;
 
     void orderRespectiveInsert(std::vector<int> &v, const int &newElem) {
         if (v.empty()) {
@@ -33,10 +33,10 @@ private:
             std::vector<int> newPath = path;
             orderRespectiveInsert(newPath, candidate);
 
-            if (combinationsSeenMap.count(newPath) == 1) {
+            if (combinationsSeenSet.find(newPath) != combinationsSeenSet.end()) {
                 continue;
             }
-            combinationsSeenMap[newPath] = true;
+            combinationsSeenSet.insert(newPath);
 
             if (newSum == target) {
                 permutations.push_back(newPath);
