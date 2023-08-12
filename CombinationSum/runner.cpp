@@ -2,27 +2,8 @@
 
 class Solution {
 private:
-    std::set<std::vector<int>> combinationsSeenSet;
-
-    void orderRespectiveInsert(std::vector<int> &v, const int &newElem) {
-        if (v.empty()) {
-            v.push_back(newElem);
-            return;
-        }
-
-        int insertionIndex = v.size();
-        for (int i = 0; i < v.size(); i++) {
-            if (v[i] >= newElem) {
-                insertionIndex = i;
-                break;
-            }
-        }
-
-        v.insert(v.begin() + insertionIndex, newElem);
-    }
-
     void generateCombinations(const std::vector<int> &candidates, const int &target,
-                              std::vector<std::vector<int>> &permutations, const std::vector<int> &path = {},
+                              std::vector<std::vector<int>> &permutations, std::vector<int> &path,
                               const int &sum = 0) {
         for (const int &candidate: candidates) {
             int newSum = sum + candidate;
@@ -30,31 +11,33 @@ private:
                 return;
             }
 
-            std::vector<int> newPath = path;
-            orderRespectiveInsert(newPath, candidate);
-
-            if (combinationsSeenSet.find(newPath) != combinationsSeenSet.end()) {
+            // ensure that paths are only generated in ascending order, this prevents duplicates without having to store seen paths, suggested by https://github.com/Ryan4253
+            if (!path.empty() && candidate < path.back()) {
                 continue;
             }
-            combinationsSeenSet.insert(newPath);
+
+            path.push_back(candidate);
 
             if (newSum == target) {
-                permutations.push_back(newPath);
+                permutations.push_back(path);
+                path.pop_back();
                 return;
             }
 
-            generateCombinations(candidates, target, permutations, newPath, newSum);
+            generateCombinations(candidates, target, permutations, path, newSum);
+
+            path.pop_back();
         }
     }
 
 public:
     std::vector<std::vector<int>> combinationSum(std::vector<int> &candidates, int target) {
-        std::sort(candidates.begin(), candidates.end(), [](const int &a, const int &b) -> bool {
-            return a < b;
-        });
+        std::sort(candidates.begin(), candidates.end());
 
         std::vector<std::vector<int>> combinationsVector;
-        generateCombinations(candidates, target, combinationsVector);
+        // ryan also suggested to declare a variable and pass it by reference, which I disregarded when I initially thought of it because it's a tad ugly
+        std::vector<int> path;
+        generateCombinations(candidates, target, combinationsVector, path);
 
         return combinationsVector;
     }
