@@ -3,7 +3,7 @@
 class Solution {
 private:
     void generateCombinations(const std::vector<int> &candidates, const int &target,
-                              std::vector<std::vector<int>> &permutations, std::vector<int> &path,
+                              std::vector<std::vector<int>> &combinations, std::vector<int> &path,
                               const int &sum = 0) {
         for (const int &candidate: candidates) {
             int newSum = sum + candidate;
@@ -19,12 +19,12 @@ private:
             path.push_back(candidate);
 
             if (newSum == target) {
-                permutations.push_back(path);
+                combinations.push_back(path);
                 path.pop_back();
                 return;
             }
 
-            generateCombinations(candidates, target, permutations, path, newSum);
+            generateCombinations(candidates, target, combinations, path, newSum);
 
             path.pop_back();
         }
@@ -34,12 +34,12 @@ public:
     std::vector<std::vector<int>> combinationSum(std::vector<int> &candidates, int target) {
         std::sort(candidates.begin(), candidates.end());
 
-        std::vector<std::vector<int>> combinationsVector;
+        std::vector<std::vector<int>> combinations;
         // ryan also suggested to declare a variable and pass it by reference, which I disregarded when I initially thought of it because it's a tad ugly
         std::vector<int> path;
-        generateCombinations(candidates, target, combinationsVector, path);
+        generateCombinations(candidates, target, combinations, path);
 
-        return combinationsVector;
+        return combinations;
     }
 };
 
