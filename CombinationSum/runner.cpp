@@ -21,7 +21,7 @@ private:
             if (newSum == target) {
                 combinations.push_back(path);
                 path.pop_back();
-                return;
+                return; // backtrack since there can be no other non-duplicate solutions on this path(any other unique solution would be greater than target)
             }
 
             generateCombinations(candidates, target, combinations, path, newSum);
