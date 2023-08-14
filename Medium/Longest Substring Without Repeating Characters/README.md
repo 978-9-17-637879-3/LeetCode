@@ -9,4 +9,4 @@
     * 32.34mb
     * Beats 8.83% of users with C++
 
-I have an idea for a faster method...
+Supposed to use a [sliding window](https://blog.reachsumit.com/posts/2020/10/leetcode-sliding-window/). Now I know.
